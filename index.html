@@ -64,10 +64,10 @@
   .feat h3 { font-size:1.05rem; margin:12px 0 6px; }
   .feat p { color:var(--muted); font-size:.92rem; }
 
-  /* band */
-  .band { background:var(--olive); color:#fff; border-radius:28px; padding:48px 32px; text-align:center; margin:0 24px; }
-  .band .h2 { color:#fff; }
-  .band p { color:rgba(255,255,255,.82); max-width:560px; margin:16px auto 0; }
+  /* band — soft light panel, not a heavy dark block */
+  .band { background:#EFF0E2; color:var(--ink); border-radius:28px; padding:48px 32px; text-align:center; margin:0 24px; border:1px solid rgba(92,102,56,.14); }
+  .band .h2 { color:var(--olive); }
+  .band p { color:var(--muted); max-width:560px; margin:16px auto 0; }
   .band .cta { background:var(--pink); margin-top:28px; }
   .band .cta:hover { background:#e01f68; }
 
@@ -79,13 +79,6 @@
 
   @media (max-width:720px) {
     .steps, .features { grid-template-columns:1fr; }
-  }
-  @media (prefers-color-scheme: dark) {
-    :root { --paper:#12140E; --card:#1F2317; --ink:#F1F2E7; --muted:#969B84;
-            --olive:#B4C382; --border:rgba(241,242,231,.12); }
-    nav .soon { color:var(--olive); background:rgba(180,195,130,.14); }
-    .cta { color:#1C2410; } .cta:hover { background:#9CAE63; }
-    .band { background:#1A1D14; }
   }
 </style>
 </head>
