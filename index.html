@@ -108,6 +108,29 @@
   .band .cta { background:var(--pink); margin-top:28px; }
   .band .cta:hover { background:#e01f68; }
 
+  /* app screenshots */
+  .phones { display:grid; grid-template-columns:repeat(3,1fr); gap:28px; margin-top:44px; }
+  .phone { text-align:center; }
+  .phone .frame { border-radius:34px; border:6px solid #2A2D20; overflow:hidden; background:#2A2D20;
+                  box-shadow:0 24px 48px -20px rgba(31,35,26,.35); transition:transform .2s ease; }
+  .phone:hover .frame { transform:translateY(-6px); }
+  .phone img { display:block; width:100%; height:auto; }
+  .phone h3 { font-size:1.02rem; margin-top:16px; }
+  .phone p { color:var(--muted); font-size:.88rem; max-width:240px; margin:4px auto 0; }
+
+  /* waitlist form */
+  .waitform { display:flex; gap:10px; justify-content:center; margin-top:28px; flex-wrap:wrap; }
+  .waitform input { width:min(320px,80vw); padding:14px 18px; border-radius:999px; border:1.5px solid rgba(92,102,56,.3);
+                    background:#fff; font-size:1rem; color:var(--ink); outline:none; }
+  .waitform input:focus { border-color:var(--olive); }
+  .waitform button { background:var(--pink); color:#fff; border:none; font-weight:700; font-size:1rem;
+                     padding:14px 28px; border-radius:999px; cursor:pointer; transition:transform .15s ease, background .15s; }
+  .waitform button:hover { transform:translateY(-2px); background:#e01f68; }
+  .waitform button:disabled { opacity:.6; transform:none; cursor:default; }
+  .waitmsg { margin-top:14px; font-size:.9rem; font-weight:600; min-height:1.4em; }
+  .waitmsg.ok { color:var(--olive); }
+  .waitmsg.err { color:#C0392B; }
+
   /* footer */
   footer { text-align:center; padding:48px 24px 60px; color:var(--muted); font-size:.9rem; }
   footer .links { display:flex; gap:24px; justify-content:center; margin-bottom:16px; flex-wrap:wrap; }
@@ -242,13 +265,41 @@
   </div>
 </section>
 
+<section>
+  <div class="wrap">
+    <div class="kicker">See it in action</div>
+    <div class="h2 serif">The night, from every angle</div>
+    <div class="phones">
+      <div class="phone">
+        <div class="frame"><img src="/assets/shots/gallery.jpg" alt="A Keptt event gallery filled with photos from a birthday party" loading="lazy" /></div>
+        <h3>One shared gallery</h3>
+        <p>Everyone's photos and videos in a single, live-filling wall.</p>
+      </div>
+      <div class="phone">
+        <div class="frame"><img src="/assets/shots/discover.jpg" alt="The Discover screen showing live events happening nearby" loading="lazy" /></div>
+        <h3>Discover what's on</h3>
+        <p>Live events near you, popular spaces, and what's coming up.</p>
+      </div>
+      <div class="phone">
+        <div class="frame"><img src="/assets/shots/create.jpg" alt="Creating an event space in Keptt" loading="lazy" /></div>
+        <h3>Host in seconds</h3>
+        <p>Name it, pin the venue, share the QR — the gallery does the rest.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section id="notify" style="padding-top:88px">
   <div class="band">
     <svg class="peek kamy-float" viewBox="0 0 120 130" aria-hidden="true"><use href="#kamy-wave"/></svg>
     <div class="h2 serif">Be first to Keptt.</div>
-    <p>We're putting the finishing touches on the app. Want early access for your event,
-       society or wedding? Say hello — Kamy reads every email.</p>
-    <a class="cta" href="mailto:support@keptt-app.com?subject=Notify%20me%20when%20Keptt%20launches">Email us to get notified</a>
+    <p>Leave your email and we'll tell you the moment Keptt lands on the App Store —
+       plus early access for your event, society or wedding.</p>
+    <form class="waitform" id="waitform" novalidate>
+      <input type="email" id="waitemail" placeholder="you@example.com" autocomplete="email" required />
+      <button type="submit" id="waitbtn">Join the list</button>
+    </form>
+    <div class="waitmsg" id="waitmsg" role="status"></div>
   </div>
 </section>
 
@@ -261,5 +312,49 @@
   © 2026 Keptt · Every moment, kept.
 </footer>
 
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
+  import { getFirestore, collection, addDoc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+
+  // Public web config — access control lives in Firestore rules (the
+  // waitlist collection is create-only, never readable from clients).
+  const app = initializeApp({
+    apiKey: 'AIzaSyDADq-AsRL6_bXx0SRVgb3NvzTyGqY4wEc',
+    authDomain: 'notmoments-726ed.firebaseapp.com',
+    projectId: 'notmoments-726ed',
+  });
+  const db = getFirestore(app);
+
+  const form = document.getElementById('waitform');
+  const email = document.getElementById('waitemail');
+  const btn = document.getElementById('waitbtn');
+  const msg = document.getElementById('waitmsg');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const value = email.value.trim();
+    if (!/.+@.+\..+/.test(value)) {
+      msg.textContent = 'That email doesn\u2019t look right \u2014 mind checking it?';
+      msg.className = 'waitmsg err';
+      return;
+    }
+    btn.disabled = true;
+    btn.textContent = 'Joining\u2026';
+    try {
+      await addDoc(collection(db, 'waitlist'), {
+        email: value,
+        created_at: new Date().toISOString(),
+      });
+      form.style.display = 'none';
+      msg.textContent = 'You\u2019re on the list! Kamy will wave when we launch. \ud83d\udc4b';
+      msg.className = 'waitmsg ok';
+    } catch (err) {
+      btn.disabled = false;
+      btn.textContent = 'Join the list';
+      msg.textContent = 'Something went wrong \u2014 try again, or email support@keptt-app.com';
+      msg.className = 'waitmsg err';
+    }
+  });
+</script>
 </body>
 </html>
