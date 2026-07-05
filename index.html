@@ -28,6 +28,44 @@
   .serif { font-family:"Fraunces",Georgia,serif; }
   .wrap { max-width:1040px; margin:0 auto; padding:0 24px; }
 
+  /* Kamy's hero routine: wave -> jump -> snap a photo (flash!) -> wiggle */
+  .kamy-acts-svg { transform-origin:50% 100%; animation:kacts 14s ease-in-out infinite; overflow:visible; }
+  .kamy-arm-acts { transform-origin:103px 58px; animation:karm 14s ease-in-out infinite; }
+  .kamy-flash { opacity:0; animation:kflash 14s linear infinite; transform-origin:86px 21px; }
+  @keyframes kacts {
+    0%,8%,16%,24% { transform:translateY(0) rotate(0) scale(1,1); }
+    4%,12%,20% { transform:translateY(-7px) rotate(0) scale(1,1); }
+    /* happy jump, squash and stretch */
+    32% { transform:translateY(0) scale(1,1); }
+    34% { transform:translateY(2px) scale(1.06,.92); }
+    38% { transform:translateY(-26px) scale(.95,1.07); }
+    42% { transform:translateY(0) scale(1.05,.93); }
+    44% { transform:translateY(0) scale(1,1); }
+    /* line up the shot, lean in, snap */
+    56% { transform:rotate(0) scale(1,1); }
+    60% { transform:rotate(-5deg) scale(.985,.985); }
+    63%,66% { transform:rotate(-5deg) scale(.97,.97); }
+    70% { transform:rotate(0) scale(1,1); }
+    /* celebratory wiggle */
+    80% { transform:rotate(0); }
+    83% { transform:rotate(7deg); }
+    86% { transform:rotate(-7deg); }
+    89% { transform:rotate(5deg); }
+    92%,100% { transform:rotate(0); }
+  }
+  @keyframes karm {
+    0% { transform:rotate(8deg); } 3% { transform:rotate(-14deg); } 6% { transform:rotate(8deg); }
+    9% { transform:rotate(-14deg); } 12% { transform:rotate(8deg); } 15% { transform:rotate(-14deg); }
+    18% { transform:rotate(6deg); } 24%,100% { transform:rotate(0deg); }
+  }
+  @keyframes kflash {
+    0%,62.4%,68%,100% { opacity:0; transform:scale(.4); }
+    63% { opacity:1; transform:scale(1.15); }
+    64.5% { opacity:.15; transform:scale(1); }
+    65.5% { opacity:.9; transform:scale(1.25); }
+    67% { opacity:0; transform:scale(1.4); }
+  }
+
   /* Kamy animations: idle float, blink, waving hand (shoulder pivot) */
   .kamy-float { animation:kfloat 3s ease-in-out infinite; }
   .kamy-arm { transform-origin:103px 58px; animation:kwave 1.1s ease-in-out infinite; }
@@ -38,7 +76,9 @@
   @keyframes kblinkA { 0%,93.9%,97.1%,100% { opacity:1; } 94%,97% { opacity:0; } }
   @keyframes kblinkB { 0%,93.9%,97.1%,100% { opacity:0; } 94%,97% { opacity:1; } }
   @media (prefers-reduced-motion: reduce) {
-    .kamy-float, .kamy-arm, .kamy-open, .kamy-closed { animation:none; }
+    .kamy-float, .kamy-arm, .kamy-open, .kamy-closed,
+    .kamy-acts-svg, .kamy-arm-acts, .kamy-flash { animation:none; }
+    .kamy-flash { opacity:0; }
   }
 
   /* nav */
@@ -185,6 +225,13 @@
         <circle cx="112" cy="33" r="5.5" fill="#454D27"/>
       </g>
     </g>
+    <g id="kamy-acts">
+      <use href="#kamy-base"/>
+      <g class="kamy-arm-acts">
+        <path d="M103 56 Q110 47 112 36" stroke="#454D27" stroke-width="7" stroke-linecap="round" fill="none"/>
+        <circle cx="112" cy="33" r="5.5" fill="#454D27"/>
+      </g>
+    </g>
     <g id="kamy-happy">
       <use href="#kamy-base"/>
       <path d="M103 66 Q112 74 113 84" stroke="#454D27" stroke-width="7" stroke-linecap="round" fill="none"/>
@@ -207,8 +254,12 @@
   </div>
   <div class="hero-kamy">
     <div class="blob"></div>
-    <svg class="kamy-float" viewBox="0 0 120 130" role="img" aria-label="Kamy, the Keptt camera mascot, waving hello">
-      <use href="#kamy-wave"/>
+    <svg class="kamy-acts-svg" viewBox="0 0 120 130" role="img" aria-label="Kamy, the Keptt camera mascot, performing his routine">
+      <use href="#kamy-acts"/>
+      <g class="kamy-flash">
+        <circle cx="86" cy="21" r="26" fill="#FFF3C4"/>
+        <path d="M86 -12 L86 2 M108 21 L120 21 M102 5 L111 -4 M102 37 L111 46" stroke="#FFE9A3" stroke-width="4" stroke-linecap="round"/>
+      </g>
     </svg>
   </div>
 </header>
