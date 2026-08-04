@@ -4,11 +4,11 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Keptt — Every moment, kept.</title>
-<meta name="description" content="The shared photo gallery for your events. Everyone snaps, everyone sees — one collective gallery of the night." />
+<meta name="description" content="The shared photo gallery for your events, spaces and communities. Everyone snaps, everyone sees. Free on the App Store." />
 <link rel="icon" href="/assets/icon.png" />
 <link rel="apple-touch-icon" href="/assets/icon.png" />
 <meta property="og:title" content="Keptt — Every moment, kept." />
-<meta property="og:description" content="One shared gallery for every event. Everyone snaps, everyone sees." />
+<meta property="og:description" content="One shared gallery for every event, space and community. Now on the App Store." />
 <meta property="og:image" content="https://keptt-app.com/assets/icon.png" />
 <meta property="og:url" content="https://keptt-app.com" />
 <meta name="theme-color" content="#9CAE63" />
@@ -85,7 +85,8 @@
   nav { display:flex; align-items:center; justify-content:space-between; padding:20px 24px; max-width:1040px; margin:0 auto; }
   nav img { height:34px; }
   nav .soon { font-size:.8rem; font-weight:700; color:var(--olive); background:rgba(92,102,56,.1);
-              padding:6px 14px; border-radius:999px; letter-spacing:.3px; }
+              padding:6px 14px; border-radius:999px; letter-spacing:.3px; text-decoration:none; }
+  nav .soon:hover { background:rgba(92,102,56,.18); }
 
   /* hero */
   .hero { display:grid; grid-template-columns:1.25fr 1fr; align-items:center; gap:32px;
@@ -241,7 +242,7 @@
 
 <nav>
   <img src="/assets/wordmark.png" alt="Keptt" />
-  <span class="soon">iOS &middot; Coming soon</span>
+  <a class="soon" href="https://apps.apple.com/app/id6788915960">Now on the App&nbsp;Store&nbsp;→</a>
 </nav>
 
 <header class="hero">
@@ -249,8 +250,8 @@
     <span class="eyebrow"><span class="dot"></span>Shared event galleries</span>
     <h1 class="serif">Every moment,<br><span class="pink">kept.</span></h1>
     <p>One shared gallery for your event. Everyone snaps, everyone sees — the whole night from every angle, kept in one place.</p>
-    <a class="cta" href="mailto:support@keptt-app.com?subject=Keptt%20early%20access">Get early access <span class="heart">♥</span></a>
-    <span class="note">Launching on the App Store soon.</span>
+    <a class="cta" href="https://apps.apple.com/app/id6788915960">Download on the App Store <span class="heart">♥</span></a>
+    <span class="note">Free on iPhone. Android is on the way.</span>
   </div>
   <div class="hero-kamy">
     <div class="blob"></div>
@@ -299,6 +300,9 @@
       <div class="feat"><div class="ic">🎥</div><h3>Photos &amp; video</h3><p>Capture the whole vibe — clips autoplay right in the gallery.</p></div>
       <div class="feat"><div class="ic">💗</div><h3>Vote the best</h3><p>Double-tap to heart the great shots — the night's best rise to the top.</p></div>
       <div class="feat"><div class="ic">🔒</div><h3>Private by default</h3><p>Private events are invite-only. Report or block anyone, any time.</p></div>
+      <div class="feat"><div class="ic">🔥</div><h3>Spaces &amp; streaks</h3><p>Always-on photo loops with your crew — post on time, build the chain, and don’t be the one who snaps it.</p></div>
+      <div class="feat"><div class="ic">👥</div><h3>Communities</h3><p>Your club, society or friend group under one roof — every event and space it runs, in one place.</p></div>
+      <div class="feat"><div class="ic">💬</div><h3>Chats built in</h3><p>Group chats for events, spaces and communities, plus DMs with photo moments and reactions.</p></div>
     </div>
 
     <div class="gate">
@@ -343,14 +347,10 @@
 <section id="notify" style="padding-top:88px">
   <div class="band">
     <svg class="peek kamy-float" viewBox="0 0 120 130" aria-hidden="true"><use href="#kamy-wave"/></svg>
-    <div class="h2 serif">Be first to Keptt.</div>
-    <p>Leave your email and we'll tell you the moment Keptt lands on the App Store —
-       plus early access for your event, society or wedding.</p>
-    <form class="waitform" id="waitform" novalidate>
-      <input type="email" id="waitemail" placeholder="you@example.com" autocomplete="email" required />
-      <button type="submit" id="waitbtn">Join the list</button>
-    </form>
-    <div class="waitmsg" id="waitmsg" role="status"></div>
+    <div class="h2 serif">Keptt is live.</div>
+    <p>Grab it free on the App Store and start your first shared gallery tonight —
+       your party, your society, your wedding, your crew.</p>
+    <a class="cta" href="https://apps.apple.com/app/id6788915960">Download Keptt <span style="color:#fff">♥</span></a>
   </div>
 </section>
 
@@ -363,49 +363,6 @@
   © 2026 Keptt · Every moment, kept.
 </footer>
 
-<script type="module">
-  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
-  import { getFirestore, collection, addDoc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
-  // Public web config — access control lives in Firestore rules (the
-  // waitlist collection is create-only, never readable from clients).
-  const app = initializeApp({
-    apiKey: 'AIzaSyDADq-AsRL6_bXx0SRVgb3NvzTyGqY4wEc',
-    authDomain: 'notmoments-726ed.firebaseapp.com',
-    projectId: 'notmoments-726ed',
-  });
-  const db = getFirestore(app);
-
-  const form = document.getElementById('waitform');
-  const email = document.getElementById('waitemail');
-  const btn = document.getElementById('waitbtn');
-  const msg = document.getElementById('waitmsg');
-
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const value = email.value.trim();
-    if (!/.+@.+\..+/.test(value)) {
-      msg.textContent = 'That email doesn\u2019t look right \u2014 mind checking it?';
-      msg.className = 'waitmsg err';
-      return;
-    }
-    btn.disabled = true;
-    btn.textContent = 'Joining\u2026';
-    try {
-      await addDoc(collection(db, 'waitlist'), {
-        email: value,
-        created_at: new Date().toISOString(),
-      });
-      form.style.display = 'none';
-      msg.textContent = 'You\u2019re on the list! Kamy will wave when we launch. \ud83d\udc4b';
-      msg.className = 'waitmsg ok';
-    } catch (err) {
-      btn.disabled = false;
-      btn.textContent = 'Join the list';
-      msg.textContent = 'Something went wrong \u2014 try again, or email support@keptt-app.com';
-      msg.className = 'waitmsg err';
-    }
-  });
-</script>
 </body>
 </html>
